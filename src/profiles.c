@@ -69,10 +69,12 @@ tpsc_profile_apply(const struct tpsc_profile *profile, struct tpsc_vec input)
         return (struct tpsc_vec){ 0.0, 0.0 };
 
     speed = hypot(input.x, input.y);
-    if (speed == 0.0)
+    if (speed == 0.0 || !isfinite(speed))
         return (struct tpsc_vec){ 0.0, 0.0 };
 
     output_speed = profile_scalar(profile, speed);
+    if (!isfinite(output_speed))
+        return (struct tpsc_vec){ 0.0, 0.0 };
     if (profile->clamp_negative_output && output_speed < 0.0)
         output_speed = 0.0;
 
