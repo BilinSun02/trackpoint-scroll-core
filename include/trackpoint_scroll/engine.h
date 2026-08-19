@@ -48,6 +48,11 @@ enum tpsc_status {
     TPSC_ERR_TIME_REVERSED = -4,
 };
 
+enum tpsc_restart_policy {
+    TPSC_RESTART_REARM_STARTUP = 0,
+    TPSC_RESTART_BYPASS_STARTUP,
+};
+
 /* Fill cfg with the currently tested baseline parameters. */
 void tpsc_engine_config_defaults(struct tpsc_engine_config *cfg);
 
@@ -65,6 +70,16 @@ void tpsc_engine_destroy(struct tpsc_engine *engine);
  */
 int tpsc_engine_begin(struct tpsc_engine *engine, uint64_t time_us);
 int tpsc_engine_end(struct tpsc_engine *engine, uint64_t time_us);
+
+/*
+ * Reset motion state without ending the active gesture. REARM_STARTUP makes
+ * the next report begin a normal startup window. BYPASS_STARTUP makes the next
+ * report enter sustained reconstruction directly, measuring its first interval
+ * from time_us.
+ */
+int tpsc_engine_restart(struct tpsc_engine *engine,
+                        uint64_t time_us,
+                        enum tpsc_restart_policy policy);
 
 /*
  * Feed one timestamped raw relative displacement report. Reports must have
