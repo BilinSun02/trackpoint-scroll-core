@@ -2,7 +2,7 @@
 
 A small, platform-neutral C library for turning sparse TrackPoint relative-motion reports into deterministic continuous scroll deltas.
 
-The library deliberately concentrates on motion processing rather than device discovery, event interception, keyboard policy, or scroll-event delivery. Its current pipeline is:
+The library deliberately concentrates on reusable motion processing rather than device discovery, event interception, keyboard policy, or scroll-event delivery. Its current pipeline is:
 
 ```text
 timestamped relative-motion reports
@@ -38,17 +38,21 @@ The public headers are under `include/trackpoint_scroll/`.
 
 ## Start here
 
+- `docs/README.md` — documentation map.
 - `docs/ARCHITECTURE.md` — layering, stable engine boundary, restart semantics, and extension guidance.
 - `docs/DESIGN.md` — hard invariants, tested defaults, and design classes that should not be revived casually.
+- `docs/INTEGRATION_EXAMPLES.md` — generic adapter shape and deliberately isolated host examples.
 - `docs/VALIDATION.md` — required checks and current regression coverage.
-- `docs/PROJECT_RULES.md` — repository-as-source-of-truth and compatibility discipline.
+- `docs/PROJECT_RULES.md` — repository-as-source-of-truth, compatibility, and integration-reference discipline.
 - `CONTRIBUTING.md` — code and contribution conventions.
 
 ## Repository scope
 
-This repository owns reusable scrolling mechanics and their invariants. It does not own host-specific device classification, input interception, button/key routing, scheduler APIs, or scroll-event injection.
+This repository owns reusable scrolling mechanics and their invariants. Host-specific discovery, interception, button/key routing, scheduler APIs, and scroll-event injection normally live in adapters or larger scrolling systems.
 
-The architecture is intentionally layered so additional scrolling facilities can be added beside or above the current engine without coupling them into its stable reconstruction path. Read `docs/ARCHITECTURE.md` before extending the library.
+Host-specific systems may appear in clearly quarantined documentation examples when useful. Those examples do not change dependency direction: core source, public APIs, configuration structures, and build dependencies remain host-neutral.
+
+The architecture is intentionally layered so additional scrolling facilities can be added beside or above the current engine without coupling them into its stable reconstruction path, and consumers can use only the modules they need. Read `docs/ARCHITECTURE.md` before extending the library.
 
 ## Documentation rule
 
