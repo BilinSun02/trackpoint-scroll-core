@@ -34,7 +34,7 @@ At the initial repository extraction, the following checks passed:
 - memoryless-profile regression suite;
 - AddressSanitizer/UndefinedBehaviorSanitizer engine run;
 - AddressSanitizer/UndefinedBehaviorSanitizer profile run;
-- source scan confirming the repository contains no integration-specific platform names prohibited by the repository scope.
+- source scan confirming the reusable implementation kept its dependency boundary clean.
 
 The available execution environment did not contain Meson, so the checked-in `meson.build` was not executed during the initial extraction. This is not a Meson validation claim. Contributors with Meson installed should run:
 
@@ -43,9 +43,11 @@ meson setup builddir
 meson test -C builddir --print-errorlogs
 ```
 
+The Meson file is also designed for subproject consumption: standalone test executables are omitted when `meson.is_subproject()` is true, while `core_dep` remains available to the containing build.
+
 ## Current regression coverage
 
-The initial tests exercise:
+The tests exercise:
 
 - componentwise startup fixed steps;
 - raw startup magnitude erasure;
@@ -62,6 +64,20 @@ The initial tests exercise:
 - radial direction preservation;
 - exact-zero handling;
 - negative-output reversal and clamping;
+- containment of non-finite input/profile results at the built-in profile boundary;
 - calibrated affine, quadratic, and hyperbolic defaults.
+
+## Extraction-equivalence check
+
+During the first integration refactor, a standalone reference model of the pre-extraction startup/reconstruction behavior was run against the shared engine. Affine, quadratic, and hyperbolic traces matched across:
+
+- componentwise startup and split-axis coalescing;
+- the startup-to-sustained transition;
+- overlapping sparse reports;
+- idle rearming;
+- finite reconstruction tails;
+- in-gesture restart that deliberately bypasses startup.
+
+This is an algorithm-equivalence check, not a substitute for building and testing any containing host integration.
 
 Future work should add long-running ring-wrap tests and deterministic replay fixtures from captured timestamped input traces.
