@@ -13,6 +13,7 @@
 9. **Profile-independent startup.** Startup fixed-step distance must not depend on the selected sustained transform.
 10. **Reset stateful transforms at burst/gesture boundaries.** No stale velocity history crosses an idle rearm or explicit reset.
 11. **Explicit time.** Algorithms depend on timestamps and logical periods, not assumptions about callback punctuality.
+12. **Reset policy is explicit.** Higher-level state changes that discard reconstruction must choose whether startup is rearmed; the engine does not infer this from an opaque gesture policy.
 
 ## Current tested defaults
 
