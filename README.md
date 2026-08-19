@@ -36,6 +36,14 @@ make test
 
 The public headers are under `include/trackpoint_scroll/`.
 
+## Start here
+
+- `docs/ARCHITECTURE.md` — layering, stable engine boundary, restart semantics, and extension guidance.
+- `docs/DESIGN.md` — hard invariants, tested defaults, and design classes that should not be revived casually.
+- `docs/VALIDATION.md` — required checks and current regression coverage.
+- `docs/PROJECT_RULES.md` — repository-as-source-of-truth and compatibility discipline.
+- `CONTRIBUTING.md` — code and contribution conventions.
+
 ## Repository scope
 
 This repository owns reusable scrolling mechanics and their invariants. It does not own host-specific device classification, input interception, button/key routing, scheduler APIs, or scroll-event injection.
