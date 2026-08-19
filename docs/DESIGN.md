@@ -14,6 +14,7 @@
 10. **Reset stateful transforms at burst/gesture boundaries.** No stale velocity history crosses an idle rearm or explicit reset.
 11. **Explicit time.** Algorithms depend on timestamps and logical periods, not assumptions about callback punctuality.
 12. **Reset policy is explicit.** Higher-level state changes that discard reconstruction must choose whether startup is rearmed; the engine does not infer this from an opaque gesture policy.
+13. **Contain non-finite profile results.** Built-in memoryless profiles map a non-finite input magnitude or non-finite scalar result to zero rather than allowing NaN/Inf to escape the transform boundary.
 
 ## Current tested defaults
 
@@ -39,6 +40,10 @@ hyperbolic: y = 0.75*sqrt(1.6^2 + x^2) - 1.175
 At input magnitude `x=2.5`, these produce approximately 1.000, 1.025, and 1.051 respectively.
 
 The affine intercept is intentionally zero: a positive affine offset was too eager under the lightest force. The small positive onset in the nonlinear profiles remains useful for making tiny sustained samples visible.
+
+## Numerical containment
+
+The engine normally receives finite relative-motion values, but the built-in profile boundary is defensive: if vector magnitude is non-finite, or a configured formula produces a non-finite scalar magnitude, the output is exactly zero. This avoids propagating malformed/extreme numerical values into a host scrolling system and preserves the containment behavior expected by integrations that previously performed this check around their profile code.
 
 ## Failed approaches worth remembering
 
