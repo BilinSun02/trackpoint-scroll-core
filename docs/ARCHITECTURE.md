@@ -29,6 +29,7 @@ The host adapters are intentionally outside this repository.
 The engine accepts:
 
 - gesture begin/end boundaries;
+- in-gesture reconstruction restarts with explicit startup policy;
 - monotonic timestamps in microseconds;
 - two-dimensional relative displacement reports;
 - logical tick calls.
@@ -36,6 +37,8 @@ The engine accepts:
 The engine produces one two-dimensional delta per logical tick. It does not decide how that delta is presented to an application or compositor.
 
 The public engine type is opaque. This is deliberate: internal reconstruction structures can evolve without forcing callers to embed or mirror them.
+
+`tpsc_engine_restart()` is the coordination boundary for a higher-level policy change that must discard pending reconstruction without necessarily ending the surrounding gesture. Callers choose whether the next report rearms the fixed startup branch or bypasses startup and enters sustained reconstruction directly. The latter measures its first interval from the restart timestamp.
 
 ## Scheduling model
 
