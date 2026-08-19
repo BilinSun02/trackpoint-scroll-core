@@ -234,6 +234,37 @@ test_end_discards_tail(void)
 }
 
 static void
+test_restart_policy(void)
+{
+    struct tpsc_engine_config cfg;
+    struct tpsc_engine *engine;
+    struct tpsc_vec out;
+
+    tpsc_engine_config_defaults(&cfg);
+    cfg.transform.apply = NULL; /* identity */
+    engine = make_engine(&cfg);
+
+    assert(tpsc_engine_feed(engine, 1000, (struct tpsc_vec){ 1.0, 0.0 }) == TPSC_OK);
+    assert(tpsc_engine_tick(engine, 3000, &out) == TPSC_OK);
+    assert_close(out.x, 0.4, 1e-12);
+
+    /* Bypass restart discards old state and sends the next report sustained. */
+    assert(tpsc_engine_restart(engine, 4000, TPSC_RESTART_BYPASS_STARTUP) == TPSC_OK);
+    assert(tpsc_engine_feed(engine, 6000, (struct tpsc_vec){ 1.0, 0.0 }) == TPSC_OK);
+    assert(tpsc_engine_tick(engine, 8000, &out) == TPSC_OK);
+    /* 2 ms gap is clamped to the 10 ms minimum -> five shares. */
+    assert_close(out.x, 0.2, 1e-12);
+
+    /* Rearm restart makes the first later report a fixed step again. */
+    assert(tpsc_engine_restart(engine, 9000, TPSC_RESTART_REARM_STARTUP) == TPSC_OK);
+    assert(tpsc_engine_feed(engine, 11000, (struct tpsc_vec){ -5.0, 0.0 }) == TPSC_OK);
+    assert(tpsc_engine_tick(engine, 13000, &out) == TPSC_OK);
+    assert_close(out.x, -0.4, 1e-12);
+
+    tpsc_engine_destroy(engine);
+}
+
+static void
 test_hyperbolic_transform(void)
 {
     struct tpsc_engine_config cfg;
@@ -267,6 +298,7 @@ main(void)
     test_interval_median_and_overlap();
     test_unlimited_startup_window();
     test_end_discards_tail();
+    test_restart_policy();
     test_hyperbolic_transform();
     puts("engine tests: PASS");
     return 0;
