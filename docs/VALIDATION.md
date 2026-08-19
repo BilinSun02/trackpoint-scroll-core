@@ -58,6 +58,7 @@ The initial tests exercise:
 - median interval estimation;
 - overlapping causal contributions and pre-transform displacement conservation;
 - explicit gesture-end tail cancellation;
+- in-gesture restart with startup rearm and startup bypass;
 - radial direction preservation;
 - exact-zero handling;
 - negative-output reversal and clamping;
