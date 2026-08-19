@@ -14,6 +14,19 @@ Porting handoff documents may remain external. Any lasting technical conclusion 
 - Avoid host-specific types, event constants, filesystem paths, or scheduler objects in public reusable APIs.
 - New stateful transforms must define reset behavior.
 
+## Host-specific references
+
+Host-specific systems may be mentioned in clearly isolated documentation or examples when that helps explain how to consume the library. Such references are illustrative rather than dependencies or preferred hosts.
+
+The architectural boundary remains strict:
+
+- core source, public headers, configuration structures, and build dependencies must not acquire host-specific types or assumptions merely because an example integration needs them;
+- dependency direction remains from an adapter or larger scrolling system toward this library;
+- integration-specific gesture routing, event APIs, configuration storage, schedulers, and output injection stay outside reusable modules unless a genuinely general abstraction has first been identified;
+- an integration that needs only part of this repository must be able to consume that part without pulling unrelated higher-level facilities into the stable reconstruction engine.
+
+When integration work motivates a useful new facility, describe it in general scrolling terms, give it an explicit interface, and test it without requiring the motivating host. See `INTEGRATION_EXAMPLES.md` for the adapter pattern and quarantined examples.
+
 ## Validation discipline
 
 For algorithm changes, tests should cover the relevant invariants directly. Useful categories include:
