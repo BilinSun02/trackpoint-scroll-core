@@ -106,6 +106,12 @@ The transform callback receives a uniform-grid reconstructed vector. It may be m
 
 The fixed startup step bypasses the transform by design.
 
+## Build as a subproject
+
+The Meson build always exposes `core_dep` for consumers. Standalone regression-test executables are defined only when this repository is the top-level Meson project; embedding the core as a subproject therefore does not add unrelated test targets to the containing build.
+
+This is a dependency-boundary rule, not a special case for any one host. Consumers should depend on `core_dep` and should not reach into the core's private source list or internal structs.
+
 ## Extending toward a larger scrolling stack
 
 Add new capabilities as separate modules with explicit interfaces. Examples include direction locking, gesture policy, sequence lifecycle, momentum, application-facing units, or richer configuration. Avoid folding those responsibilities into the reconstruction engine unless they change reconstruction itself.
