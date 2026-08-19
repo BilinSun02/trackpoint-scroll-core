@@ -49,6 +49,14 @@ main(void)
     out = tpsc_profile_apply(&p, (struct tpsc_vec){ 2.0, 0.0 });
     assert(out.x == 0.0 && out.y == 0.0);
 
+    /* Non-finite input or scalar output is contained at the profile boundary. */
+    tpsc_profile_defaults_affine(&p);
+    out = tpsc_profile_apply(&p, (struct tpsc_vec){ INFINITY, 0.0 });
+    assert(out.x == 0.0 && out.y == 0.0);
+    p.params.affine.k = INFINITY;
+    out = tpsc_profile_apply(&p, (struct tpsc_vec){ 1.0, 0.0 });
+    assert(out.x == 0.0 && out.y == 0.0);
+
     puts("profile tests: PASS");
     return 0;
 }
