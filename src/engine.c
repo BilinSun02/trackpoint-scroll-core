@@ -235,6 +235,28 @@ tpsc_engine_end(struct tpsc_engine *engine, uint64_t time_us)
     return TPSC_OK;
 }
 
+int
+tpsc_engine_restart(struct tpsc_engine *engine,
+                    uint64_t time_us,
+                    enum tpsc_restart_policy policy)
+{
+    if (!engine)
+        return TPSC_ERR_ARGUMENT;
+    if (!engine->gesture_active)
+        return TPSC_ERR_ARGUMENT;
+    if (engine->have_input && time_us < engine->last_time_us)
+        return TPSC_ERR_TIME_REVERSED;
+    if (policy != TPSC_RESTART_REARM_STARTUP &&
+        policy != TPSC_RESTART_BYPASS_STARTUP)
+        return TPSC_ERR_ARGUMENT;
+
+    clear_motion_state(engine);
+    engine->last_time_us = time_us;
+    engine->have_input = policy == TPSC_RESTART_BYPASS_STARTUP;
+    reset_transform(engine, time_us);
+    return TPSC_OK;
+}
+
 static void
 begin_burst(struct tpsc_engine *engine, uint64_t time_us)
 {
