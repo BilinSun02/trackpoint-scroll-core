@@ -17,12 +17,14 @@ core_dep = declare_dependency(
   include_directories: inc,
   dependencies: m_dep)
 
-engine_test = executable(
-  'test-engine', 'tests/test_engine.c',
-  dependencies: core_dep)
-profile_test = executable(
-  'test-profiles', 'tests/test_profiles.c',
-  dependencies: core_dep)
+if not meson.is_subproject()
+  engine_test = executable(
+    'test-engine', 'tests/test_engine.c',
+    dependencies: core_dep)
+  profile_test = executable(
+    'test-profiles', 'tests/test_profiles.c',
+    dependencies: core_dep)
 
-test('engine', engine_test)
-test('profiles', profile_test)
+  test('engine', engine_test)
+  test('profiles', profile_test)
+endif
