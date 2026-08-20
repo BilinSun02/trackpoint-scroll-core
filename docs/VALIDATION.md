@@ -36,14 +36,30 @@ At the initial repository extraction, the following checks passed:
 - AddressSanitizer/UndefinedBehaviorSanitizer profile run;
 - source scan confirming the reusable implementation kept its dependency boundary clean.
 
-The available execution environment did not contain Meson, so the checked-in `meson.build` was not executed during the initial extraction. This is not a Meson validation claim. Contributors with Meson installed should run:
+The execution environment used for the initial extraction did not contain Meson, so the checked-in `meson.build` was not executed at that stage. That historical statement is intentionally scoped to the initial extraction, not to current project status.
+
+## Meson/subproject validation
+
+The core has subsequently been consumed successfully as a real Meson subproject by the pinned libinput integration:
+
+- the integration exposed this repository under `subprojects/trackpoint-scroll-core`;
+- the parent obtained `core_dep` from the subproject;
+- real Meson configuration of the complete pinned libinput tree succeeded;
+- real Ninja compilation of that containing libinput build succeeded;
+- the resulting integration was installed and booted in a fresh graphical session;
+- post-reboot live process mappings were verified by ELF Build ID to use the built core-backed libinput library;
+- basic interactive scrolling worked in that verified session.
+
+This validates the subproject boundary in an actual consumer. It does not replace the core's own unit/sanitizer tests, and host-specific behavior remains the responsibility of the integration repository.
+
+For standalone Meson testing, contributors should still run:
 
 ```bash
 meson setup builddir
 meson test -C builddir --print-errorlogs
 ```
 
-The Meson file is also designed for subproject consumption: standalone test executables are omitted when `meson.is_subproject()` is true, while `core_dep` remains available to the containing build.
+The Meson file is designed for subproject consumption: standalone test executables are omitted when `meson.is_subproject()` is true, while `core_dep` remains available to the containing build.
 
 ## Current regression coverage
 
