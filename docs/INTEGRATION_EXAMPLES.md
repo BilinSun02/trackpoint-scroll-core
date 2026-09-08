@@ -45,3 +45,30 @@ Never change the public engine API solely to expose a host-specific object or co
 ## Partial use is expected
 
 Future versions of this repository may grow additional scrolling modules. Integrators should be able to consume only the modules they need. New facilities should therefore have explicit interfaces and should not reach through opaque state or make unrelated modules mandatory.
+
+## Optional terminal-rebound adapter
+
+The terminal-rebound classifier is consumed beside the reconstruction engine,
+not through it. A host that wants this facility typically adds:
+
+```text
+relative pointer report
+    -> forward immediately
+    -> tpsc_rebound_filter_feed()
+
+pending candidate
+    -> schedule tpsc_rebound_filter_deadline_us()
+
+quiet deadline
+    -> host-specific "did another pointer move?" safety check
+    -> tpsc_rebound_filter_finish()
+    -> apply nonzero exact-undo correction through the host pointer path
+```
+
+The host should reset the classifier at semantic boundaries where retrospective
+pointer movement would be unsafe, such as device removal or drag/button mode
+changes. Timer APIs, global-pointer queries, and correction injection remain
+host-owned.
+
+See `REBOUND.md` for the motivation, classifier state model, default thresholds,
+new-platform adaptation guidance, pseudocode, and non-goals.
