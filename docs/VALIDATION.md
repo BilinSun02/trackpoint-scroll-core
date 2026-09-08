@@ -23,7 +23,7 @@ cc -std=c11 -O1 -g -Wall -Wextra -Werror -pedantic \
   src/engine.c src/profiles.c tests/test_engine.c -lm -o test-engine-san
 ```
 
-Run an equivalent sanitizer build for `tests/test_profiles.c`.
+Run equivalent sanitizer builds for `tests/test_profiles.c` and `tests/test_rebound.c`.
 
 ## Initial extraction status
 
@@ -81,7 +81,12 @@ The tests exercise:
 - exact-zero handling;
 - negative-output reversal and clamping;
 - containment of non-finite input/profile results at the built-in profile boundary;
-- calibrated affine, quadratic, and hyperbolic defaults.
+- calibrated affine, quadratic, and hyperbolic defaults;
+- terminal rebound exact-undo classification;
+- deliberate reversal escape by duration or displacement;
+- second-reversal cancellation;
+- independent per-axis rebound classification;
+- rebound reset and timestamp validation.
 
 ## Extraction-equivalence check
 
