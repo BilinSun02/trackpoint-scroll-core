@@ -4,5 +4,6 @@
 - `DESIGN.md` — hard invariants and design lessons.
 - `PROJECT_RULES.md` — standing project, contribution, and integration-reference rules.
 - `INTEGRATION_EXAMPLES.md` — generic adapter pattern plus isolated host examples.
+- `REBOUND.md` — terminal-rebound motivation, classifier semantics, and platform-adaptation guidance.
 - `VALIDATION.md` — tests run, expectations, and validation limits.
 - `VERSIONING.md` — library versioning policy.
