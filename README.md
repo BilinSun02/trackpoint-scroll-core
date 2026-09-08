@@ -28,6 +28,8 @@ first-step report limit: unlimited (-1)
 
 Built-in memoryless radial profiles are affine, quadratic, and hyperbolic. Stateful or experimental transforms can be supplied through the transform callback without changing the reconstruction engine.
 
+The repository also exposes an optional, separate terminal-rebound classifier in `trackpoint_scroll/rebound.h`. It never suppresses live reversal and is not enabled by the reconstruction engine; consumers opt in explicitly and decide whether/where to apply a retrospective exact-undo correction.
+
 ## Quick start
 
 ```bash
@@ -43,6 +45,7 @@ The public headers are under `include/trackpoint_scroll/`.
 - `docs/DESIGN.md` — hard invariants, tested defaults, and design classes that should not be revived casually.
 - `docs/INTEGRATION_EXAMPLES.md` — generic adapter shape and deliberately isolated host examples.
 - `docs/VALIDATION.md` — required checks and current regression coverage.
+- `docs/REBOUND.md` — optional terminal-rebound classifier semantics and host responsibilities.
 - `docs/PROJECT_RULES.md` — repository-as-source-of-truth, compatibility, and integration-reference discipline.
 - `CONTRIBUTING.md` — code and contribution conventions.
 
