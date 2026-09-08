@@ -279,6 +279,9 @@ observe_axis(const struct tpsc_rebound_config *cfg,
         axis->candidate_counts = counts;
         axis->candidate_start_us = time_us;
         axis->candidate_last_us = time_us;
+
+        if (candidate_has_become_intentional(cfg, axis))
+            commit_candidate(cfg, axis);
         return;
     }
 
