@@ -125,3 +125,16 @@ When adding a higher-level facility:
 5. preserve existing semantics unless an API version or opt-in mode clearly states otherwise.
 
 Do not make the current engine a miscellaneous scrolling state container. New layers should compose with it.
+
+## Optional terminal-rebound module
+
+`trackpoint_scroll/rebound.h` is a separate reusable facility beside the
+reconstruction engine. It classifies a short, small terminal reversal after
+established motion and, after quiet, can return the exact inverse displacement
+for a host-controlled retrospective correction.
+
+This module does **not** sit in the engine pipeline and does not alter live
+input. It has no host event types, cursor APIs, scheduler dependencies, or
+output injection. Hosts decide whether to instantiate it, how to schedule the
+quiet deadline, what external-motion safety checks are needed, and whether to
+apply the returned correction.
