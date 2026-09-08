@@ -7,7 +7,7 @@ m_dep = meson.get_compiler('c').find_library('m', required: false)
 
 core = static_library(
   'trackpoint-scroll-core',
-  ['src/engine.c', 'src/profiles.c'],
+  ['src/engine.c', 'src/profiles.c', 'src/rebound.c'],
   include_directories: inc,
   dependencies: m_dep,
   install: false)
@@ -24,7 +24,11 @@ if not meson.is_subproject()
   profile_test = executable(
     'test-profiles', 'tests/test_profiles.c',
     dependencies: core_dep)
+  rebound_test = executable(
+    'test-rebound', 'tests/test_rebound.c',
+    dependencies: core_dep)
 
   test('engine', engine_test)
   test('profiles', profile_test)
+  test('rebound', rebound_test)
 endif
