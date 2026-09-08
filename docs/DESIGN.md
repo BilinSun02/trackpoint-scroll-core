@@ -74,3 +74,14 @@ This makes equivalent motion depend on packetization. Redistribution and nonline
 The current startup rebound rule is evidence-driven and intentionally narrow: an immediate sign reversal on an already represented axis inside the merge window is ignored. Outside that window, reversal is ordinary input and must remain possible.
 
 Do not generalize this into sustained-motion reverse gating without new evidence.
+
+## Terminal rebound remains opt-in and retrospective
+
+A reusable terminal-rebound classifier exists as a separate module, not as a
+general sustained-motion gate in the reconstruction engine. It preserves live
+reversal exactly as reported and only classifies a candidate after terminal
+quiet. A confirmed candidate yields exact undo of the candidate displacement.
+
+Do not add speculative overdrive, outward impulse, or live reverse suppression
+to this module without separate evidence. In particular, host UI edge-pressure
+requirements are not a core rebound-classification responsibility.
